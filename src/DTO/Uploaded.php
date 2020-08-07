@@ -19,21 +19,35 @@ final class Uploaded
     private $path;
 
     /**
+     * @var int
+     */
+    private $size;
+
+    /**
      * @var string
      */
-    private $hash;
+    private $mineType;
+
+    /**
+     * @var string
+     */
+    private $encoding;
 
     /**
      * Uploaded constructor.
      * @param string $name
      * @param string $path
-     * @param string $hash
+     * @param int $size
+     * @param string $mineType
+     * @param string $encoding
      */
-    public function __construct(string $name, string $path, string $hash)
+    public function __construct(string $name, string $path, int $size, string $mineType, string $encoding)
     {
         $this->name = $name;
         $this->path = $path;
-        $this->hash = $hash;
+        $this->size = $size;
+        $this->mineType = $mineType;
+        $this->encoding = $encoding;
     }
 
     /**
@@ -53,10 +67,26 @@ final class Uploaded
     }
 
     /**
+     * @return int
+     */
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    /**
      * @return string
      */
-    public function getHash(): string
+    public function getMineType(): string
     {
-        return $this->hash;
+        return $this->mineType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoding(): string
+    {
+        return $this->encoding;
     }
 }

@@ -11,6 +11,7 @@ use ImaginariumClient\DTO\Uploaded;
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
+use function GuzzleHttp\json_decode;
 
 /**
  * Class ImaginariumClient
@@ -96,6 +97,21 @@ final class ImaginariumClient implements ImaginariumClientInterface
      */
     private function getResponse(ResponseInterface $response): array
     {
-        return [new Uploaded('', '', '')];
+        $this->logger->info('Status code: ' . $response->getStatusCode());
+
+        $list = json_decode($response->getBody()->getContents(), true);
+        $uploaded = [];
+
+        foreach ($list as $item) {
+            $uploaded[] = new Uploaded(
+                $item['filename'],
+                $item['path'],
+                $item['size'],
+                $item['mimetype'],
+                $item['encoding']
+            );
+        }
+
+        return $uploaded;
     }
 }
