@@ -4,75 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1431a82fe879ebd3e5da127ffea872d8",
+    "content-hash": "52ffb13e02a2e1e8390f4ae5f3226b8d",
     "packages": [
-        {
-            "name": "gmponos/guzzle_logger",
-            "version": "v2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/gmponos/guzzle-log-middleware.git",
-                "reference": "7a42976d27f58860584df7284fa01749baf71ec7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/gmponos/guzzle-log-middleware/zipball/7a42976d27f58860584df7284fa01749baf71ec7",
-                "reference": "7a42976d27f58860584df7284fa01749baf71ec7",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/guzzle": "^6.1 || ^7.0.1",
-                "php": "^7.2",
-                "psr/log": "^1.1"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "~0.12.32",
-                "phpstan/phpstan-phpunit": "^0.12.11",
-                "phpstan/phpstan-strict-rules": "^0.12.2",
-                "phpunit/phpunit": "^8.5.8 || ^9.2.5",
-                "squizlabs/php_codesniffer": "^3.5.5"
-            },
-            "suggest": {
-                "monolog/monolog": "A PSR-3 logger to send your logs to files, sockets and various web services"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleLogMiddleware\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "George Mponos",
-                    "email": "gmponos@gmail.com"
-                }
-            ],
-            "description": "A Guzzle middleware to log request and responses automatically",
-            "homepage": "https://github.com/gmponos/guzzle-log-middleware",
-            "keywords": [
-                "Guzzle",
-                "PSR3",
-                "log",
-                "logging"
-            ],
-            "funding": [
-                {
-                    "url": "https://github.com/gmponos",
-                    "type": "github"
-                }
-            ],
-            "time": "2020-07-05T12:27:03+00:00"
-        },
         {
             "name": "guzzlehttp/guzzle",
             "version": "7.0.1",
