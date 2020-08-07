@@ -1,0 +1,26 @@
+{
+    "name": "apps-of-the-day/imaginarium-client-php",
+    "description": "Imaginarium client",
+    "type": "library",
+    "license": "MIT",
+    "version": "0.1.0",
+    "authors": [
+        {
+            "name": "Viktor Gievoi",
+            "email": "gievoi.v@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.3",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "psr/log": "1.1.3"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "ImaginariumClient\\": "src/"
+        }
+    }
+}
