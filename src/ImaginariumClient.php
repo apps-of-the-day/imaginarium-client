@@ -2,13 +2,19 @@
 
 namespace ImaginariumClient;
 
+use Generator;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\RequestOptions;
 use ImaginariumClient\DTO\Image;
 use ImaginariumClient\DTO\Uploaded;
-use InvalidArgumentException;
+use ImaginariumClient\Exception\BadResponseException;
+use ImaginariumClient\Exception\ClientException;
+use ImaginariumClient\Exception\EmptySetException;
+use ImaginariumClient\Exception\ImaginariumExceptionInterface;
+use ImaginariumClient\Exception\UnexpectedStatusException;
+use JsonException;
+use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use function GuzzleHttp\json_decode;
@@ -17,8 +23,14 @@ use function GuzzleHttp\json_decode;
  * Class ImaginariumClient
  * @package ImaginariumClient
  */
-final class ImaginariumClient implements ImaginariumClientInterface
+final class ImaginariumClient
 {
+    private const SUCCESS_STATUSES = [
+        200,
+        201,
+        202
+    ];
+
     /**
      * @var ClientInterface
      */
@@ -49,10 +61,10 @@ final class ImaginariumClient implements ImaginariumClientInterface
 
     /**
      * @param array $list
-     * @return Uploaded[]
-     * @throws GuzzleException
+     * @return Generator
+     * @throws ImaginariumExceptionInterface
      */
-    public function upload(array $list = []): array
+    public function upload(array $list): Generator
     {
         $options = $this->configurator->getOptions();
         $options[RequestOptions::MULTIPART] = $this->getFilesList($list);
@@ -62,29 +74,44 @@ final class ImaginariumClient implements ImaginariumClientInterface
             $options
         );
 
-        $response =
-            $this->client->request(
-                $this->configurator->getMethod(), new Uri($this->configurator->getUrl()), $options
-            )
-        ;
+        try {
+            $response =
+                $this->client->request(
+                    $this->configurator->getMethod(), new Uri($this->configurator->getUrl()), $options
+                )
+            ;
+        } catch (ClientExceptionInterface $exception) {
+            throw new ClientException($exception);
+        }
 
-        return $this->getResponse($response);
+        $this->logger->info('Status code: ' . $response->getStatusCode());
+
+        if (!in_array($response->getStatusCode(), self::SUCCESS_STATUSES)) {
+            throw new UnexpectedStatusException($response);
+        }
+
+        foreach ($this->decode($response) as $item) {
+            yield new Uploaded($item['filename'], $item['path'], $item['size'], $item['mimetype'], $item['encoding']);
+        }
     }
 
     /**
      * @param array $list
      * @return array
+     *
+     * @throws EmptySetException
      */
     private function getFilesList(array $list): array
     {
         if (0 === count($list)) {
-            throw new InvalidArgumentException('Empty files set');
+            throw new EmptySetException();
         }
 
         $result = [];
 
         foreach ($list as $image) {
             /** @var Image $image */
+
             $result[] = $image->get();
         }
 
@@ -93,25 +120,15 @@ final class ImaginariumClient implements ImaginariumClientInterface
 
     /**
      * @param ResponseInterface $response
-     * @return Uploaded[]
+     * @return array
+     * @throws BadResponseException
      */
-    private function getResponse(ResponseInterface $response): array
+    private function decode(ResponseInterface $response): array
     {
-        $this->logger->info('Status code: ' . $response->getStatusCode());
-
-        $list = json_decode($response->getBody()->getContents(), true);
-        $uploaded = [];
-
-        foreach ($list as $item) {
-            $uploaded[] = new Uploaded(
-                $item['filename'],
-                $item['path'],
-                $item['size'],
-                $item['mimetype'],
-                $item['encoding']
-            );
+        try {
+            return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new BadResponseException($exception);
         }
-
-        return $uploaded;
     }
 }

@@ -1,6 +1,6 @@
 ## Imaginarium client
 
-Imaginarium server client.
+Imaginarium api client.
 
 ### Installation
 
@@ -12,23 +12,22 @@ composer require apps-of-the-day/imaginarium-client-php
 ```
 <?php
 
+use GuzzleHttp\Client;
 use ImaginariumClient\Configurator;
 use ImaginariumClient\DTO\Image;
-use ImaginariumClient\DTO\Uploaded;
 use ImaginariumClient\ImaginariumClient;
 use Psr\Log\NullLogger;
 
 require_once 'vendor/autoload.php';
 
-$config = new Configurator('http://imaginaroum-server', 'SECRET_TOKEN');
-$client = new ImaginariumClient(new GuzzleHttp\Client(), $config, new NullLogger());
+$config = new Configurator('', '');
+$guzzle = new Client();
+$client = new ImaginariumClient($guzzle, $config, new NullLogger());
 
-/** @var Uploaded[] $result **/
-$result = 
-    $client->upload(
-        [
-            new Image(new SplFileObject('./kitty.png', 'rb'))
-        ]
-    )
-;
+$result = $client->upload([
+    new Image(new SplFileObject('', 'rb'))
+]);
+
+$result->current();
+
 ```

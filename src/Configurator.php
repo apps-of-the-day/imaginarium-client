@@ -55,14 +55,6 @@ final class Configurator
     /**
      * @return string
      */
-    public function getToken(): string
-    {
-        return $this->token;
-    }
-
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return static::METHOD;
@@ -73,6 +65,12 @@ final class Configurator
      */
     public function getOptions(): array
     {
-        return $this->options;
+        $token = [
+            RequestOptions::HEADERS => [
+                'Token' => $this->token
+            ]
+        ];
+
+        return $this->options + $token;
     }
 }

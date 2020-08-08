@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52ffb13e02a2e1e8390f4ae5f3226b8d",
+    "content-hash": "423da283d464ee1fbff92cc86276391d",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -1185,16 +1185,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.3.2",
+            "version": "9.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "eacb57f3857cb6706550bd39ea500f9b1097b0bf"
+                "reference": "7e3942a29e7705cf109aa58c6e5d80997796d1dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/eacb57f3857cb6706550bd39ea500f9b1097b0bf",
-                "reference": "eacb57f3857cb6706550bd39ea500f9b1097b0bf",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e3942a29e7705cf109aa58c6e5d80997796d1dc",
+                "reference": "7e3942a29e7705cf109aa58c6e5d80997796d1dc",
                 "shasum": ""
             },
             "require": {
@@ -1279,7 +1279,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-07T09:12:30+00:00"
+            "time": "2020-08-08T05:12:01+00:00"
         },
         {
             "name": "sebastian/code-unit",
@@ -2307,7 +2307,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4"
+        "php": "^7.2"
     },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
