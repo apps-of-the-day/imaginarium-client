@@ -3,6 +3,7 @@
 namespace ImaginariumClient;
 
 use Generator;
+use ImaginariumClient\Exception\ImaginariumExceptionInterface;
 
 /**
  * Interface ImaginariumClientInterface
@@ -12,7 +13,16 @@ interface ImaginariumClientInterface
 {
     /**
      * @param array $list
-     * @return Generator
+     * @return $this
+     *
+     * @throws ImaginariumExceptionInterface
      */
-    public function upload(array $list): Generator;
+    public function setFiles(array $list): self;
+
+    /**
+     * @return Generator
+     *
+     * @throws ImaginariumExceptionInterface
+     */
+    public function upload(): Generator;
 }

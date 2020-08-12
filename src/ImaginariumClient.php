@@ -17,7 +17,6 @@ use JsonException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use SplFileInfo;
 use function GuzzleHttp\json_decode;
 
 /**
@@ -48,6 +47,11 @@ final class ImaginariumClient implements ImaginariumClientInterface
     private $logger;
 
     /**
+     * @var array
+     */
+    private $files;
+
+    /**
      * ImaginariumClient constructor.
      * @param ClientInterface $client
      * @param Configurator $configurator
@@ -58,17 +62,35 @@ final class ImaginariumClient implements ImaginariumClientInterface
         $this->client = $client;
         $this->configurator = $configurator;
         $this->logger = $logger;
+        $this->files = [];
     }
 
     /**
      * @param array $list
+     * @return $this
+     * @throws UnsupportedFormatException
+     */
+    public function setFiles(array $list): self
+    {
+        if (0 === count($list)) {
+            throw new EmptySetException();
+        }
+
+        foreach ($list as $fileName => $resource) {
+            $this->files[] = ImageWrapper::wrap($fileName, $resource);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Generator
      * @throws ImaginariumExceptionInterface
      */
-    public function upload(array $list): Generator
+    public function upload(): Generator
     {
         $options = $this->configurator->getOptions();
-        $options[RequestOptions::MULTIPART] = $this->getFilesList($list);
+        $options[RequestOptions::MULTIPART] = $this->files;
 
         $this->logger->info(
             sprintf('Request to %s/%s', $this->configurator->getMethod(), $this->configurator->getUrl()),
@@ -94,27 +116,6 @@ final class ImaginariumClient implements ImaginariumClientInterface
         foreach ($this->decode($response) as $item) {
             yield new Uploaded($item['filename'], $item['path'], $item['size'], $item['mimetype'], $item['encoding']);
         }
-    }
-
-    /**
-     * @param array $list
-     * @return array
-     *
-     * @throws EmptySetException
-     * @throws UnsupportedFormatException
-     */
-    private function getFilesList(array $list): array
-    {
-        if (0 === count($list)) {
-            throw new EmptySetException();
-        }
-
-        $result = [];
-        foreach ($list as $fileName => $resource) {
-            $result[] = ImageWrapper::wrap($fileName, $resource);
-        }
-
-        return $result;
     }
 
     /**
