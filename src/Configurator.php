@@ -67,7 +67,7 @@ final class Configurator
     {
         $token = [
             RequestOptions::HEADERS => [
-                'Token' => $this->token
+                'Authorization' => $this->token
             ]
         ];
 

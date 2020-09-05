@@ -19,7 +19,7 @@ final class ImageWrapper
      * @return array
      * @throws UnsupportedFormatException
      */
-    public static function wrap(string $name, $resource, string $fieldName = 'image'): array
+    public static function wrap(string $name, $resource, string $fieldName = 'images'): array
     {
         if (!is_resource($resource)) {
             throw new UnsupportedFormatException($name);
